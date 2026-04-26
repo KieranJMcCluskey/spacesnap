@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Space Snap</title>
+    <style>
+      body {
+        background-color: #0a0a2e;
+        background-image: url('https://images-assets.nasa.gov/image/PIA17563/PIA17563~orig.jpg');
+        background-size: cover;
+        background-position: center;
+        font-family: Arial, sans-serif;
+        color: white;
+      }
+
+      h1 {
+        text-align: center;
+        font-size: 48px;
+        color: gold;
+        text-shadow: 0 0 20px gold;
+        margin-top: 20px;
+      }
+
+      p {
+        text-align: center;
+        font-size: 18px;
+        color: lightblue;
+      }
+
+      .game-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 120px);
+        gap: 10px;
+        width: 510px;
+        margin: 20px auto;
+      }
+
+      .card-container {
+        width: 120px;
+        height: 120px;
+        perspective: 600px;
+        cursor: pointer;
+      }
+
+      .card {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transform-style: preserve-3d;
+        transition: transform 0.5s;
+        border-radius: 10px;
+      }
+
+      .card-container.flipped .card {
+        transform: rotateY(180deg);
+      }
+
+      .card-container.matched .card {
+        transform: rotateY(180deg);
+        border-color: lime;
+      }
+
+      .card-back,
+      .card-front {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid gold;
+        box-sizing: border-box;
+      }
+
+      .card-back {
+        background-color: rgba(0, 0, 80, 0.8);
+        font-size: 40px;
+      }
+
+      .card-front {
+        background-color: rgba(0, 0, 120, 0.9);
+        font-size: 60px;
+        transform: rotateY(180deg);
+      }
+
+      .card-container.matched .card-front {
+        background-color: rgba(0, 80, 0, 0.9);
+        border-color: lime;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🚀 Space Snap 🚀</h1>
+    <p>Find all the matching pairs!</p>
+
+    <div class="game-grid">
+      <div class="card-container" data-symbol="🚀"><div class="card"><div class="card-back">⭐</div><div class="card-front">🚀</div></div></div>
+      <div class="card-container" data-symbol="🌙"><div class="card"><div class="card-back">⭐</div><div class="card-front">🌙</div></div></div>
+      <div class="card-container" data-symbol="⭐"><div class="card"><div class="card-back">⭐</div><div class="card-front">⭐</div></div></div>
+      <div class="card-container" data-symbol="🪐"><div class="card"><div class="card-back">⭐</div><div class="card-front">🪐</div></div></div>
+      <div class="card-container" data-symbol="☄️"><div class="card"><div class="card-back">⭐</div><div class="card-front">☄️</div></div></div>
+      <div class="card-container" data-symbol="👾"><div class="card"><div class="card-back">⭐</div><div class="card-front">👾</div></div></div>
+      <div class="card-container" data-symbol="🛸"><div class="card"><div class="card-back">⭐</div><div class="card-front">🛸</div></div></div>
+      <div class="card-container" data-symbol="🌍"><div class="card"><div class="card-back">⭐</div><div class="card-front">🌍</div></div></div>
+      <div class="card-container" data-symbol="🚀"><div class="card"><div class="card-back">⭐</div><div class="card-front">🚀</div></div></div>
+      <div class="card-container" data-symbol="🌙"><div class="card"><div class="card-back">⭐</div><div class="card-front">🌙</div></div></div>
+      <div class="card-container" data-symbol="⭐"><div class="card"><div class="card-back">⭐</div><div class="card-front">⭐</div></div></div>
+      <div class="card-container" data-symbol="🪐"><div class="card"><div class="card-back">⭐</div><div class="card-front">🪐</div></div></div>
+      <div class="card-container" data-symbol="☄️"><div class="card"><div class="card-back">⭐</div><div class="card-front">☄️</div></div></div>
+      <div class="card-container" data-symbol="👾"><div class="card"><div class="card-back">⭐</div><div class="card-front">👾</div></div></div>
+      <div class="card-container" data-symbol="🛸"><div class="card"><div class="card-back">⭐</div><div class="card-front">🛸</div></div></div>
+      <div class="card-container" data-symbol="🌍"><div class="card"><div class="card-back">⭐</div><div class="card-front">🌍</div></div></div>
+    </div>
+
+    <script>
+      let firstCard = null;
+      let secondCard = null;
+      let locked = false;
+
+      let cards = document.querySelectorAll('.card-container');
+
+      cards.forEach(function(card) {
+        card.addEventListener('click', function() {
+          if (locked) return;
+          if (card === firstCard) return;
+          if (card.classList.contains('matched')) return;
+
+          card.classList.add('flipped');
+
+          if (firstCard === null) {
+            firstCard = card;
+          } else {
+            secondCard = card;
+            locked = true;
+
+            if (firstCard.dataset.symbol === secondCard.dataset.symbol) {
+              firstCard.classList.add('matched');
+              secondCard.classList.add('matched');
+              firstCard = null;
+              secondCard = null;
+              locked = false;
+            } else {
+              setTimeout(function() {
+                firstCard.classList.remove('flipped');
+                secondCard.classList.remove('flipped');
+                firstCard = null;
+                secondCard = null;
+                locked = false;
+              }, 1000);
+            }
+          }
+        });
+      });
+    </script>
+
+  </body>
+</html>
